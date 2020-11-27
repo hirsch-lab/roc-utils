@@ -130,32 +130,41 @@ def get_objective(method="minopt", **kwargs):
         # Assignment cost ratio, see reference below.
         # It is possible to pass a value for m. Default choice: 1.
         m = kwargs.get("m", 1.)
-        def J(fpr, tpr): return tpr - m * fpr
+        def J(fpr, tpr):
+            return tpr - m * fpr
     elif method == "hesse":
         # This function is roughly redundant to "cost".
         # Distance function from diagonal (Hesse normal form)
         # See also: https://ch.mathworks.com/help/stats/perfcurve.html
         m = 1   # Assignment cost ratio, see reference below.
-        def J(fpr, tpr): return np.abs(m * fpr - tpr) / np.sqrt(m * m + 1)
+        def J(fpr, tpr):
+            return np.abs(m * fpr - tpr) / np.sqrt(m * m + 1)
     elif method == "youden":
-        def J(fpr, tpr): return tpr - fpr
+        def J(fpr, tpr):
+            return tpr - fpr
     elif method == "minopt":
         # Take negative distance for maximization.
-        def J(fpr, tpr): return -np.sqrt(fpr**2 + (1 - tpr)**2)
+        def J(fpr, tpr):
+            return -np.sqrt(fpr**2 + (1 - tpr)**2)
     elif method == "minoptsym":
         # Same as minopt, except that it takes the smaller of
         # the distances from points (0,1) or (1,0).
-        def J(fpr, tpr): return -min(np.sqrt(fpr**2 + (1 - tpr)**2),
-                                     np.sqrt((1 - fpr)**2 + tpr**2))
+        def J(fpr, tpr):
+            return -min(np.sqrt(fpr**2 + (1 - tpr)**2),
+                        np.sqrt((1 - fpr)**2 + tpr**2))
     elif method in ("plr", "lr+", "positivelikelihoodratio"):
-        def J(fpr, tpr): return tpr / fpr if fpr > 0 else -1
+        def J(fpr, tpr):
+            return tpr / fpr if fpr > 0 else -1
     elif method in ("nlr", "lr-", "negativelikelihoodratio"):
-        def J(fpr, tpr): return -(1 - tpr) / (1 - fpr) if fpr < 1 else -1
+        def J(fpr, tpr):
+            return -(1 - tpr) / (1 - fpr) if fpr < 1 else -1
     elif method == "dor":
-        def J(fpr, tpr): return tpr * (1 - fpr) / \
-            (fpr * (1 - tpr)) if fpr > 0 and tpr < 1 else -1
+        def J(fpr, tpr):
+            return ((tpr * (1 - fpr) / (fpr * (1 - tpr)))
+                    if fpr > 0 and tpr < 1 else -1)
     elif method == "concordance":
-        def J(fpr, tpr): return tpr * (1 - fpr)
+        def J(fpr, tpr):
+            return tpr * (1 - fpr)
     elif method == "chi2":
         # N: number of negative observations.
         # P: number of positive observations.
@@ -164,7 +173,6 @@ def get_objective(method="minopt", **kwargs):
         N = kwargs["N"]
         P = kwargs["P"]
         assert(N > 0 and P > 0)
-
         def fun(fpr, tpr):
             if (P * tpr + N * fpr) == 0:
                 return -1
@@ -173,8 +181,7 @@ def get_objective(method="minopt", **kwargs):
             return ((tpr - fpr)**2 /
                     (P * tpr + N * fpr) / (P + N) *
                     (1 - (P * tpr + N * fpr) / (P + N)) *
-                    (1 / P + 1 / N)
-                    )
+                    (1 / P + 1 / N))
         J = fun
     elif method == "acc":
         # N: number of negative observations.
@@ -183,7 +190,8 @@ def get_objective(method="minopt", **kwargs):
         assert("P" in kwargs)
         N = kwargs["N"]
         P = kwargs["P"]
-        def J(fpr, tpr): return (P * tpr + N * (1 - fpr)) / (P + N)
+        def J(fpr, tpr):
+            return (P * tpr + N * (1 - fpr)) / (P + N)
     elif method == "cohen":
         # N: number of negative observations.
         # P: number of positive observations.
@@ -191,9 +199,7 @@ def get_objective(method="minopt", **kwargs):
         assert("P" in kwargs)
         N = kwargs["N"]
         P = kwargs["P"]
-
         def fun(fpr, tpr):
-            import warnings
             from statsmodels.stats.inter_rater import cohens_kappa
             contingency = [[(1 - fpr) * N, (1 - tpr) * P],
                            [fpr * N, tpr * P]]
@@ -299,13 +305,11 @@ def compute_roc(X, y, pos_label=True, objective="minopt", auto_flip=False):
     costs = {o: get_objective(o, N=n, P=p) for o in objectives}
 
     # Sort X, and organize the y with the same ordering.
-    if True:
-        i_sorted = X.argsort()
-    else:
-        # In case the discriminator is x<thr instead of x>thr, one could
-        # simply reverse the sorted values.
-        # Note: AUC compensates for this (it simply takes the maximum)
-        i_sorted = X.argsort()[::-1]
+    i_sorted = X.argsort()          # If y_pred = x>thr
+    # In case the discriminator is x<thr instead of x>thr, one could
+    # simply reverse the sorted values.
+    # Note: AUC compensates for this (it simply takes the maximum)
+    # i_sorted = X.argsort()[::-1]  # If y_pred = x<thr
 
     X_sorted = X[i_sorted]
     y_sorted = y[i_sorted]
@@ -447,8 +451,8 @@ def compute_mean_roc(rocs,
 
     # Interpolate the curves to measure at fixed fpr.
     # This is required to compute the mean ROC curve.
-    # TODO: Although I'm optimistic, I'm not entirely
-    #       sure if it is okay to also interpolate thr.
+    # Note: Although I'm optimistic, I'm not entirely
+    #       sure if it is okay to interpolate thr too.
     for i, ret in enumerate(rocs):
         tpr_all[i, :] = interp(fpr_mean, ret.fpr, ret.tpr)
         thr_all[i, :] = interp(fpr_mean, ret.fpr, ret.thr)
@@ -565,5 +569,4 @@ def compute_roc_bootstrap(X, y, pos_label,
                                     auto_flip=auto_flip,
                                     objective=objective)
         return mean_roc
-    else:
-        return results
+    return results

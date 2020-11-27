@@ -36,17 +36,17 @@ def demo_basic_usage():
 
     # Show data
     _, (ax1, ax2) = plt.subplots(2,1)
-    ax1.hist(x1[y1==False], bins=20, density=True,
+    ax1.hist(x1[~y1], bins=20, density=True,
              color="red", alpha=0.4, label="Class 1")
-    ax1.hist(x1[y1==True], bins=20, density=True,
+    ax1.hist(x1[y1], bins=20, density=True,
              color="blue", alpha=0.4, label="Class 2")
     ax1.legend()
     ax1.set_xlabel("x")
     ax1.set_ylabel("density")
     ax1.set_title("Data")
-    ax2.hist(x2[y2==False], bins=20, density=True,
+    ax2.hist(x2[~y2], bins=20, density=True,
              color="red", alpha=0.4, label="Class 1")
-    ax2.hist(x2[y2==True], bins=20, density=True,
+    ax2.hist(x2[y2], bins=20, density=True,
              color="blue", alpha=0.4, label="Class 2")
     ax2.legend()
     ax2.set_xlabel("x")

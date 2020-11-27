@@ -34,6 +34,56 @@ def plot_roc(roc,
     import matplotlib.pyplot as plt
     import matplotlib.colors as mplc
 
+    def _format_axes(loc, margin):
+        ax.axis("square")
+        ax.set_xlim([0 - margin, 1. + margin])
+        ax.set_ylim([0 - margin, 1. + margin])
+        ax.set_xlabel("FPR (false positive rate)")
+        ax.set_ylabel("TPR (true positive rate)")
+        ax.grid(True)
+        if legend_out:
+            ax.legend(loc=loc,
+                      bbox_to_anchor=(1.05, 1),
+                      borderaxespad=0.)
+        else:
+            ax.legend(loc=loc)
+
+    def _plot_opt_point(key, opt, color, marker, zorder, label, ax):
+        # Some objectives can be visualized.
+        # Plot these optional things first.
+        if key == "youden":
+            # Vertical line between optimal point and diagonal.
+            ax.plot([opt.opp[0], opt.opp[0]],
+                    [opt.opp[0], opt.opp[1]],
+                    color=color,
+                    zorder=zorder + 1)
+        if key == "cost":
+            # Line parallel to diagonal (shrunk by m if m≠1).
+            ax.plot(opt.opq[0], opt.opq[1], ":k",
+                    alpha=0.3,
+                    zorder=zorder + 1)
+        if key == "concordance":
+            # Rectangle illustrating the area tpr*(1-fpr)
+            from matplotlib import patches
+            ll = [opt.opp[0], 0]
+            w = 1 - opt.opp[0]
+            h = opt.opp[1]
+            rect = patches.Rectangle(ll, w, h,
+                                     facecolor=color,
+                                     alpha=0.2,
+                                     zorder=zorder + 1)
+            ax.add_patch(rect)
+
+        face_color = mplc.to_rgba(color, alpha=0.3)
+        ax.plot(opt.opp[0], opt.opp[1],
+                linestyle="None",
+                marker=marker,
+                markerfacecolor=face_color,
+                markeredgecolor=color,
+                label=label,
+                zorder=zorder + 3)
+
+
     if ax is None:
         ax = plt.gca()
 
@@ -67,60 +117,21 @@ def plot_roc(roc,
     if show_opt:
         from itertools import cycle
         markers = cycle(["o", "*", "^", "s", "P", "D"])
-        for id, opt in roc.opd.items():
-            # Some objectives can be visualized.
-            # Plot these optional things first.
-            if id == "cost":
-                # Line parallel to diagonal (shrunk by m if m≠1).
-                ax.plot(opt.opq[0], opt.opq[1], ":k",
-                        alpha=0.3,
-                        zorder=zorder + 1)
-            if id == "youden":
-                # Vertical line between optimal point and diagonal.
-                ax.plot([opt.opp[0], opt.opp[0]],
-                        [opt.opp[0], opt.opp[1]],
-                        color=color,
-                        zorder=zorder + 1)
-            if id == "concordance":
-                # Rectangle illustrating the area tpr*(1-fpr)
-                from matplotlib import patches
-                ll = [opt.opp[0], 0]
-                w = 1 - opt.opp[0]
-                h = opt.opp[1]
-                rect = patches.Rectangle(ll, w, h,
-                                         facecolor=color,
-                                         alpha=0.2,
-                                         zorder=zorder + 1)
-                ax.add_patch(rect)
-
+        for key, opt in roc.opd.items():
             pa_str = (", PA=%.3f" % opt.opa) if opt.opa else ""
             if show_details:
-                legend_entry_opt = "Optimal point (%s, thr=%.3g%s)" % (
-                    id, opt.opt, pa_str)
+                legend_entry_opt = ("Optimal point (%s, thr=%.3g%s)"
+                                    % (key, opt.opt, pa_str))
             else:
                 legend_entry_opt = "Optimal point (thr=%.3g)" % opt.opt
+            _plot_opt_point(key=key, opt=opt, color=color,
+                            marker=next(markers), zorder=zorder,
+                            label=legend_entry_opt, ax=ax)
 
-            face_color = mplc.to_rgba(color, alpha=0.3)
-            ax.plot(opt.opp[0], opt.opp[1],
-                    linestyle="None",
-                    marker=next(markers),
-                    markerfacecolor=face_color,
-                    markeredgecolor=color,
-                    label=legend_entry_opt,
-                    zorder=zorder + 3)
     if format_axes:
         margin = 0.02
         loc = "upper left" if (roc.inv or legend_out) else "lower right"
-        ax.axis("square")
-        ax.set_xlim([0 - margin, 1. + margin])
-        ax.set_ylim([0 - margin, 1. + margin])
-        ax.set_xlabel("FPR (false positive rate)")
-        ax.set_ylabel("TPR (true positive rate)")
-        ax.grid(True)
-        if legend_out:
-            ax.legend(loc=loc, bbox_to_anchor=(1.05, 1), borderaxespad=0.)
-        else:
-            ax.legend(loc=loc)
+        _format_axes(loc=loc, margin=margin)
 
 
 def plot_mean_roc(rocs, auto_flip=True, show_all=False, ax=None, **kwargs):
@@ -168,7 +179,8 @@ def plot_mean_roc(rocs, auto_flip=True, show_all=False, ax=None, **kwargs):
 
     # Plot ROC curve for single bootstrap samples.
     if show_all:
-        def isint(x): return isinstance(x, int) and not isinstance(x, bool)
+        def isint(x):
+            return isinstance(x, int) and not isinstance(x, bool)
         n_loops = show_all if isint(show_all) else np.inf
         n_loops = min(n_loops, len(rocs))
         for ret in rocs[:n_loops]:
