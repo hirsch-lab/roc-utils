@@ -1,0 +1,15 @@
+dist/
+build/
+__pycache__/
+*.egg-info
+*.so
+MANIFEST
+
+# Output of coverage (via pytest-cov)
+.coverage
+
+# Output of tox
+.tox/
+
+#
+.ipynb*
