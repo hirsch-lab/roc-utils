@@ -97,7 +97,6 @@ def plot_roc(roc,
                 label=label,
                 zorder=zorder + 3)
 
-
     if ax is None:
         ax = plt.gca()
 
@@ -283,6 +282,7 @@ def plot_roc_bootstrap(X, y, pos_label,
     # 1) Collect the data.
     rocs = compute_roc_bootstrap(X=X, y=y,
                                  pos_label=pos_label,
+                                 objective=objective,
                                  auto_flip=auto_flip,
                                  n_bootstrap=n_bootstrap,
                                  random_state=random_state,

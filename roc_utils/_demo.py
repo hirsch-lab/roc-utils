@@ -2,6 +2,7 @@ import numpy as np
 from ._plot import plot_roc_bootstrap, plot_roc
 from ._roc import compute_roc
 
+
 def _sample_data(n1, mu1, std1, n2, mu2, std2, seed=42):
     """
     Construct binary classification problem with n1 and n2
@@ -15,8 +16,8 @@ def _sample_data(n1, mu1, std1, n2, mu2, std2, seed=42):
     x2 = rng.normal(mu2, std2, n2)
     y1 = np.zeros(n1, dtype=bool)
     y2 = np.ones(n2, dtype=bool)
-    x = np.concatenate([x1,x2])
-    y = np.concatenate([y1,y2])
+    x = np.concatenate([x1, x2])
+    y = np.concatenate([y1, y2])
     return x, y
 
 
@@ -40,7 +41,7 @@ def demo_bootstrap(n_samples=600, n_bootstrap=50, seed=42):
     Demonstrate a ROC analysis for a bootstrapped dataset.
     """
     import matplotlib.pyplot as plt
-    assert(n_samples>2)
+    assert(n_samples > 2)
     pos_label = True
     x, y = _sample_data(n1=n_samples//2, mu1=0.0, std1=0.5,
                         n2=n_samples//2, mu2=1.0, std2=0.7,

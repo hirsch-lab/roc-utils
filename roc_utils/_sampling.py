@@ -34,7 +34,10 @@ def resample_data(*arrays, **kwargs):
             rng = np.random.RandomState(rng)
 
         n = lens[0]
-        indices = rng.randint(0, n, n_samples)
+        if replace:
+            indices = rng.randint(0, n, n_samples)
+        else:
+            indices = rng.choice(np.arange(0, n), n_samples)
         # Sampling along an axis!=0 is not very clever.
         arrays = [x.take(indices, axis=axis) for x in arrays]
         # Flatten the output if only one input array was provided.

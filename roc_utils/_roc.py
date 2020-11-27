@@ -9,6 +9,7 @@ from ._sampling import resample_data
 
 _DEFAULT_OBJECTIVE = "minoptsym"
 
+
 def get_objective(objective=_DEFAULT_OBJECTIVE, **kwargs):
     """
     The function returns a callable computing a cost f(fpr(c), tpr(c))
@@ -443,7 +444,7 @@ def compute_roc_aucopt(fpr, tpr, thr, costs,
 def compute_mean_roc(rocs,
                      resolution=101,
                      auto_flip=True,
-                     objective=[_DEFAULT_OBJECTIVE]):
+                     objective=_DEFAULT_OBJECTIVE):
     objectives = [objective] if isinstance(objective, str) else objective
 
     # Initialize
@@ -548,7 +549,7 @@ def compute_roc_bootstrap(X, y, pos_label,
 
     # Collect the data. About bootstrapping:
     # https://datascience.stackexchange.com/questions/14369/
-    for i in range(n_bootstrap):
+    for _ in range(n_bootstrap):
         x_boot, y_boot = resample_data(X, y,
                                        replace=True,
                                        stratify=y if stratified else None,
