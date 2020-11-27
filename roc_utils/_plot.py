@@ -51,6 +51,17 @@ def plot_roc(roc,
     def _plot_opt_point(key, opt, color, marker, zorder, label, ax):
         # Some objectives can be visualized.
         # Plot these optional things first.
+        if key == "minopt":
+            ax.plot([0, opt.opp[0]], [1, opt.opp[1]], ":ok",
+                    alpha=0.3,
+                    zorder=zorder + 1)
+        if key == "minoptsym":
+            d2_ul = (opt.opp[0]-0)**2+(opt.opp[1]-1)**2
+            d2_ll = (opt.opp[0]-1)**2+(opt.opp[1]-0)**2
+            ref = (0, 1) if (d2_ul < d2_ll) else (1, 0)
+            ax.plot([ref[0], opt.opp[0]], [ref[1], opt.opp[1]], ":ok",
+                    alpha=0.3,
+                    zorder=zorder + 1)
         if key == "youden":
             # Vertical line between optimal point and diagonal.
             ax.plot([opt.opp[0], opt.opp[0]],
