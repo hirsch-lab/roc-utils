@@ -549,7 +549,7 @@ def compute_roc_bootstrap(X, y, pos_label,
 
     # Collect the data. About bootstrapping:
     # https://datascience.stackexchange.com/questions/14369/
-    for i in range(n_bootstrap):
+    for _ in range(n_bootstrap):
         x_boot, y_boot = resample_data(X, y,
                                        replace=True,
                                        stratify=y if stratified else None,

@@ -162,7 +162,7 @@ def demo_auto_flip():
     x, y = sample_data(n1=300, mu1=0.0, std1=0.5,
                        n2=300, mu2=1.0, std2=0.7)
 
-    _, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,4.8))
+    _, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4.8))
     roc1 = compute_roc(X=x, y=y, pos_label=pos_label)
     roc2 = compute_roc(X=x, y=y, pos_label=not pos_label)
     plot_roc(roc1, show_opt=True, label="Original", color="green", ax=ax1)
