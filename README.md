@@ -52,7 +52,7 @@ plot_roc(roc, label="Sample data", color="red")
 plt.show()
 ```
 
-See [examples/tutorial.ipynb](https://github.com/hirsch-lab/roc-utils/examples/tutorial.ipynb) for a more detailed introduction.
+See [examples/tutorial.ipynb](https://github.com/hirsch-lab/roc-utils/blob/main/examples/tutorial.ipynb) for a more detailed introduction.
 
 ### Build
 
