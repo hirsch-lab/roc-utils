@@ -20,6 +20,11 @@ This Python package provides tools to compute and visualize [ROC curves](https:/
 ### Installation:
 
     pip install roc-utils
+    
+To quickly test the installation, use the following cals
+
+    python -c "import roc_utils; print(roc_utils.__version__)"
+    python -c "import roc_utils; roc_utils.demo_bootstrap()"
 
 ### Usage:
 
