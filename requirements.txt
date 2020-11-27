@@ -1,0 +1,7 @@
+# Install with pip:
+#   pip install -r requirements.txt
+numpy
+scipy
+pandas
+matplotlib
+scikit-learn>=0.23 # testing only
