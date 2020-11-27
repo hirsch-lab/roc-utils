@@ -16,7 +16,6 @@
 
 This Python package provides tools to compute and visualize [ROC curves](https://en.wikipedia.org/wiki/Receiver_operating_characteristic). ROC curves can be used to graphically assess the diagnostic ability of a binary classifier. 
 
-The package is provided under the MIT license.
 
 ### Installation:
 
