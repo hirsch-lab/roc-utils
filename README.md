@@ -7,7 +7,7 @@
 [![image](https://img.shields.io/pypi/v/roc-utils)](https://pypi.org/project/roc-utils/)
 [![License](https://img.shields.io/pypi/l/roc-utils)](https://github.com/hirsch-lab/roc-utils/blob/main/LICENSE)
 <!--[![Build Status](https://travis-ci.org/hirsch-lab/cyminiball.svg?branch=main)](https://travis-ci.org/hirsch-lab/roc-utils)-->
-<!--[![CodeFactor](https://www.codefactor.io/repository/github/hirsch-lab/roc-utils/badge)](https://www.codefactor.io/repository/github/hirsch-lab/roc-utils)-->
+[![CodeFactor](https://www.codefactor.io/repository/github/hirsch-lab/roc-utils/badge)](https://www.codefactor.io/repository/github/hirsch-lab/roc-utils)
 [![DeepSource](https://deepsource.io/gh/hirsch-lab/roc-utils.svg/?label=active+issues)](https://deepsource.io/gh/hirsch-lab/roc-utils/?ref=repository-badge)
 <!--Travis build and test-->
 <!--Coveralls.io-->
@@ -20,6 +20,11 @@ This Python package provides tools to compute and visualize [ROC curves](https:/
 ### Installation:
 
     pip install roc-utils
+    
+To quickly test the installation, use the following cals
+
+    python -c "import roc_utils; print(roc_utils.__version__)"
+    python -c "import roc_utils; roc_utils.demo_bootstrap()"
 
 ### Usage:
 
@@ -47,7 +52,7 @@ plot_roc(roc, label="Sample data", color="red")
 plt.show()
 ```
 
-See [examples/examples.ipynb](https://github.com/hirsch-lab/roc-utils/examples/examples.ipynb) for a more detailed introduction.
+See [examples/tutorial.ipynb](https://github.com/hirsch-lab/roc-utils/examples/tutorial.ipynb) for a more detailed introduction.
 
 ### Build
 

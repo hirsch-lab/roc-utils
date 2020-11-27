@@ -18,7 +18,6 @@ class StructContainer():
     def __init__(self, dictionary=None, **kwargs):
         if dictionary is not None:
             assert(isinstance(dictionary, (dict, StructContainer)))
-            # TODO: test if keys are valid python expressions.
             self.__dict__.update(dictionary)
         self.__dict__.update(kwargs)
 
@@ -63,14 +62,12 @@ class StructContainer():
         return dict(self.items())
 
     def first(self):
-        # This function makes only sense starting for python 3.6+
-        # where the insertion order is respected by a dict.
+        # Assumption: __dict__ is ordered (python>=3.6).
         key, value = next(self.items())
         return key, value
 
     def last(self):
-        # This function makes only sense starting for python 3.6+
-        # where the insertion order is respected by a dict.
+        # Assumption: __dict__ is ordered (python>=3.6).
         # See also: https://stackoverflow.com/questions/58413076
         key = list(self.keys())[-1]
         return key, self[key]
