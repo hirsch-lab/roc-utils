@@ -6,8 +6,14 @@ from roc_utils import *
 
 
 def sample_data(n1, mu1, std1, n2, mu2, std2, seed=42):
+    """
+    Construct binary classification problem with n1 and n2
+    samples per class, respectively.
+
+    Returns two np.ndarrays x and y of length (n1+n2).
+    x represents the predictor, y the binary response.
+    """
     rng = np.random.RandomState(seed)
-    #  sample size, mean, std
     x1 = rng.normal(mu1, std1, n1)
     x2 = rng.normal(mu2, std2, n2)
     y1 = np.zeros(n1, dtype=bool)

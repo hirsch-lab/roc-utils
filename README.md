@@ -2,13 +2,13 @@
 
 <!--https://raw.githubusercontent.com/yngvem/group-lasso/master/README.rst-->
 
-<!--[![Downloads](https://pepy.tech/badge/cyminiball)](https://pepy.tech/project/cyminiball)-->
-<!--https://pypistats.org/packages/cyminiball-->
-[![image](https://img.shields.io/pypi/v/cyminiball.svg)](https://pypi.org/project/cyminiball/)
-[![License](https://img.shields.io/pypi/l/cyminiball)](https://github.com/hirsch-lab/cyminiball/blob/main/LICENSE)
-[![Build Status](https://travis-ci.org/hirsch-lab/cyminiball.svg?branch=main)](https://travis-ci.org/hirsch-lab/cyminiball)
-[![CodeFactor](https://www.codefactor.io/repository/github/hirsch-lab/cyminiball/badge)](https://www.codefactor.io/repository/github/hirsch-lab/cyminiball)
-[![DeepSource](https://deepsource.io/gh/hirsch-lab/cyminiball.svg/?label=active+issues)](https://deepsource.io/gh/hirsch-lab/cyminiball/?ref=repository-badge)
+<!--[![Downloads](https://pepy.tech/badge/roc-utils)](https://pepy.tech/project/roc-utils)-->
+<!--https://pypistats.org/packages/roc-utils-->
+[![image](https://img.shields.io/pypi/v/roc-utils)](https://pypi.org/project/roc-utils/)
+[![License](https://img.shields.io/pypi/l/roc-utils)](https://github.com/hirsch-lab/cyminiball/blob/main/LICENSE)
+[![Build Status](https://travis-ci.org/hirsch-lab/cyminiball.svg?branch=main)](https://travis-ci.org/hirsch-lab/roc-utils)
+[![CodeFactor](https://www.codefactor.io/repository/github/hirsch-lab/roc-utils/badge)](https://www.codefactor.io/repository/github/hirsch-lab/roc-utils)
+[![DeepSource](https://deepsource.io/gh/hirsch-lab/roc-utils.svg/?label=active+issues)](https://deepsource.io/gh/hirsch-lab/roc-utils/?ref=repository-badge)
 <!--Travis build and test-->
 <!--Coveralls.io-->
 <!--Read-the-docs not required for such a small project-->
