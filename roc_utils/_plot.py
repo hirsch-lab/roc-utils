@@ -1,7 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.colors as mplc
-
 from ._roc import compute_roc, compute_mean_roc, compute_roc_bootstrap
 
 
@@ -34,6 +31,9 @@ def plot_roc(roc,
                         - legend_label_inv: Use 1-AUC if roc.inv=True (True)
                         Additional kwargs are forwarded to ax.plot().
     """
+    import matplotlib.pyplot as plt
+    import matplotlib.colors as mplc
+
     if ax is None:
         ax = plt.gca()
 
@@ -140,6 +140,7 @@ def plot_mean_roc(rocs, auto_flip=True, show_all=False, ax=None, **kwargs):
     optimal point. See get_objective() for details. Default choice is the
     "minopt" objective.
     """
+    import matplotlib.pyplot as plt
     if ax is None:
         ax = plt.gca()
 
