@@ -148,7 +148,7 @@ def demo_objectives():
     _, ax1 = plt.subplots()
     plot_roc(roc, show_opt=True, ax=ax1)
     ax1.legend(loc="upper left", bbox_to_anchor=(1.05, 1), borderaxespad=0.)
-    ax1.set_title("Comparison of different objectives")
+    ax1.set_title("Visualization of different optimal points")
 
 
 def demo_auto_flip():
