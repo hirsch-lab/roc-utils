@@ -7,8 +7,9 @@ from ._stats import mean_intervals
 from ._types import StructContainer
 from ._sampling import resample_data
 
+_DEFAULT_OBJECTIVE = "minoptsym"
 
-def get_objective(method="minopt", **kwargs):
+def get_objective(objective=_DEFAULT_OBJECTIVE, **kwargs):
     """
     The function returns a callable computing a cost f(fpr(c), tpr(c))
     as a function of a cut-off/threshold c. The cost function is used to
@@ -28,7 +29,23 @@ def get_objective(method="minopt", **kwargs):
         is true and the total population:
             prevalence = (tp+fn)/(tp+tn+fp+fn)
 
-    Available methods:
+    Available objectives:
+        minopt:     Computes the distance from the optimal point (0,1).
+                        J = sqrt((1-specitivity)^2 + (1-sensitivity)^2)
+                        J = sqrt(fpr^2 + (1-tpr)^2)
+        minoptsym:  Similar as "minopt", but takes the smaller of the distances
+                    from points (0,1) and (1,0). This makes sense for a
+                    "inverted" predictor whose ROC curve is mainly under the
+                    diagonal.
+        youden:     Computes Youden's J statistic (also called Youden's index).
+                        J = sensitivity + specitivity - 1
+                          = tpr - fpr
+                    Youden's index summarizes the performance of a diagnostic
+                    test that is 1 for a perfect test (fpr=0, tpr=1) and 0 for
+                    a perfectly useless test (where fpr=tpr). See also the
+                    explanations above.
+                    Youden's index can be visualized as the distance from the
+                    diagonal in vertical direction.
         cost:       Maximizes the distance from the diagonal fpr==tpr.
                     Principally, it is possible to apply particular costs
                     for the four possible outcomes of a diagnostic tests (tp,
@@ -45,15 +62,6 @@ def get_objective(method="minopt", **kwargs):
                     the cutoff value where fm is maximized:
                         J = fm = tpr - m*fpr
                     For m=1, the cost reduces to Youden's index.
-        youden:     Computes Youden's J statistic (also called Youden's index).
-                        J = sensitivity + specitivity - 1
-                          = tpr - fpr
-                    Youden's index summarizes the performance of a diagnostic
-                    test that is 1 for a perfect test (fpr=0, tpr=1) and 0 for
-                    a perfectly useless test (where fpr=tpr). See also the
-                    explanations above.
-                    Youden's index can be visualized as the distance from the
-                    diagonal in vertical direction.
         concordance: Another objective that summarizes the diagnostic
                     performance of a test.
                         J = sensitivity * specitivity
@@ -62,13 +70,6 @@ def get_objective(method="minopt", **kwargs):
                     are 0, and it is 1 (maximal) if tpr=1 and fpr=0.
                     The concordance can be visualized as the rectangular
                     formed by tpr and (1-fpr).
-        minopt:     Computes the distance from the optimal point (0,1).
-                        J = sqrt((1-specitivity)^2 + (1-sensitivity)^2)
-                        J = sqrt(fpr^2 + (1-tpr)^2)
-        minoptsym:  Similar as "minopt", but takes the smaller of the distances
-                    from points (0,1) and (1,0). This makes sense for a
-                    "inverted" predictor whose ROC curve is mainly under the
-                    diagonal.
         lr+, plr:   Positive likelihood ratio (LR+):
                         J = tpr / fpr
         lr-, nlr:   Negative likelihood ratio (LR-):
@@ -125,47 +126,47 @@ def get_objective(method="minopt", **kwargs):
             Miller, Siegmund (1982). Maximally Selected Chi Square Statistics.
             http://doi.org/10.2307/2529881
     """
-    method = method.lower()
-    if method == "cost":
+    objective = objective.lower()
+    if objective == "minopt":
+        # Take negative distance for maximization.
+        def J(fpr, tpr):
+            return -np.sqrt(fpr**2 + (1 - tpr)**2)
+    elif objective == "minoptsym":
+        # Same as minopt, except that it takes the smaller of
+        # the distances from points (0,1) or (1,0).
+        def J(fpr, tpr):
+            return -min(np.sqrt(fpr**2 + (1 - tpr)**2),
+                        np.sqrt((1 - fpr)**2 + tpr**2))
+    elif objective == "youden":
+        def J(fpr, tpr):
+            return tpr - fpr
+    elif objective == "cost":
         # Assignment cost ratio, see reference below.
         # It is possible to pass a value for m. Default choice: 1.
         m = kwargs.get("m", 1.)
         def J(fpr, tpr):
             return tpr - m * fpr
-    elif method == "hesse":
+    elif objective == "hesse":
         # This function is roughly redundant to "cost".
         # Distance function from diagonal (Hesse normal form)
         # See also: https://ch.mathworks.com/help/stats/perfcurve.html
         m = 1   # Assignment cost ratio, see reference below.
         def J(fpr, tpr):
             return np.abs(m * fpr - tpr) / np.sqrt(m * m + 1)
-    elif method == "youden":
-        def J(fpr, tpr):
-            return tpr - fpr
-    elif method == "minopt":
-        # Take negative distance for maximization.
-        def J(fpr, tpr):
-            return -np.sqrt(fpr**2 + (1 - tpr)**2)
-    elif method == "minoptsym":
-        # Same as minopt, except that it takes the smaller of
-        # the distances from points (0,1) or (1,0).
-        def J(fpr, tpr):
-            return -min(np.sqrt(fpr**2 + (1 - tpr)**2),
-                        np.sqrt((1 - fpr)**2 + tpr**2))
-    elif method in ("plr", "lr+", "positivelikelihoodratio"):
+    elif objective in ("plr", "lr+", "positivelikelihoodratio"):
         def J(fpr, tpr):
             return tpr / fpr if fpr > 0 else -1
-    elif method in ("nlr", "lr-", "negativelikelihoodratio"):
+    elif objective in ("nlr", "lr-", "negativelikelihoodratio"):
         def J(fpr, tpr):
             return -(1 - tpr) / (1 - fpr) if fpr < 1 else -1
-    elif method == "dor":
+    elif objective == "dor":
         def J(fpr, tpr):
             return ((tpr * (1 - fpr) / (fpr * (1 - tpr)))
                     if fpr > 0 and tpr < 1 else -1)
-    elif method == "concordance":
+    elif objective == "concordance":
         def J(fpr, tpr):
             return tpr * (1 - fpr)
-    elif method == "chi2":
+    elif objective == "chi2":
         # N: number of negative observations.
         # P: number of positive observations.
         assert("N" in kwargs)
@@ -183,7 +184,7 @@ def get_objective(method="minopt", **kwargs):
                     (1 - (P * tpr + N * fpr) / (P + N)) *
                     (1 / P + 1 / N))
         J = fun
-    elif method == "acc":
+    elif objective == "acc":
         # N: number of negative observations.
         # P: number of positive observations.
         assert("N" in kwargs)
@@ -192,7 +193,7 @@ def get_objective(method="minopt", **kwargs):
         P = kwargs["P"]
         def J(fpr, tpr):
             return (P * tpr + N * (1 - fpr)) / (P + N)
-    elif method == "cohen":
+    elif objective == "cohen":
         # N: number of negative observations.
         # P: number of positive observations.
         assert("N" in kwargs)
@@ -211,10 +212,14 @@ def get_objective(method="minopt", **kwargs):
                 # https://github.com/statsmodels/statsmodels/issues/5530
                 return cohens_kappa(contingency)["kappa"]
         J = fun
+    else:
+        assert(False)
     return J
 
 
-def compute_roc(X, y, pos_label=True, objective="minopt", auto_flip=False):
+def compute_roc(X, y, pos_label=True,
+                objective=_DEFAULT_OBJECTIVE,
+                auto_flip=False):
     """
     Compute receiver-operator characteristics for a 1D dataset.
 
@@ -438,7 +443,7 @@ def compute_roc_aucopt(fpr, tpr, thr, costs,
 def compute_mean_roc(rocs,
                      resolution=101,
                      auto_flip=True,
-                     objective=["minopt"]):
+                     objective=[_DEFAULT_OBJECTIVE]):
     objectives = [objective] if isinstance(objective, str) else objective
 
     # Initialize
@@ -495,7 +500,7 @@ def compute_mean_roc(rocs,
 
 
 def compute_roc_bootstrap(X, y, pos_label,
-                          objective="minopt",
+                          objective=_DEFAULT_OBJECTIVE,
                           auto_flip=False,
                           n_bootstrap=100,
                           random_state=None,

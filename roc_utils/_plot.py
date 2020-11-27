@@ -1,5 +1,8 @@
 import numpy as np
-from ._roc import compute_roc, compute_mean_roc, compute_roc_bootstrap
+from ._roc import (compute_roc,
+                   compute_mean_roc,
+                   compute_roc_bootstrap,
+                   _DEFAULT_OBJECTIVE)
 
 
 def plot_roc(roc,
@@ -180,7 +183,7 @@ def plot_mean_roc(rocs, auto_flip=True, show_all=False, ax=None, **kwargs):
     is_opt_str = isinstance(show_opt, (str, list, tuple))
     # Defaults for mean-ROC.
     resolution = kwargs.pop("resolution", 101)
-    objective = show_opt if is_opt_str else "minopt"
+    objective = show_opt if is_opt_str else _DEFAULT_OBJECTIVE
 
     # Compute average ROC.
     ret_mean = compute_mean_roc(rocs=rocs,
@@ -242,7 +245,7 @@ def plot_roc_simple(X, y, pos_label, auto_flip=True,
         ax = plt.gca()
     show_opt = kwargs.pop("show_opt", False)
     is_opt_str = isinstance(show_opt, (str, list, tuple))
-    objective = show_opt if is_opt_str else "minopt"
+    objective = show_opt if is_opt_str else _DEFAULT_OBJECTIVE
     ret = compute_roc(X=X, y=y, pos_label=pos_label,
                       objective=objective,
                       auto_flip=auto_flip)
@@ -253,7 +256,7 @@ def plot_roc_simple(X, y, pos_label, auto_flip=True,
 
 
 def plot_roc_bootstrap(X, y, pos_label,
-                       objective="minopt",
+                       objective=_DEFAULT_OBJECTIVE,
                        auto_flip=True,
                        n_bootstrap=100,
                        random_state=None,
