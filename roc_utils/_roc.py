@@ -443,7 +443,7 @@ def compute_roc_aucopt(fpr, tpr, thr, costs,
 def compute_mean_roc(rocs,
                      resolution=101,
                      auto_flip=True,
-                     objective=[_DEFAULT_OBJECTIVE]):
+                     objective=_DEFAULT_OBJECTIVE):
     objectives = [objective] if isinstance(objective, str) else objective
 
     # Initialize

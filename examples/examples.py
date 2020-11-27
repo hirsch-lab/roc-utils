@@ -2,7 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import context
-from roc_utils import *
+from roc_utils import (compute_roc,
+                       compute_mean_roc,
+                       compute_roc_bootstrap,
+                       plot_roc,
+                       plot_mean_roc,
+                       plot_roc_bootstrap)
 
 
 def sample_data(n1, mu1, std1, n2, mu2, std2, seed=42):
@@ -81,7 +86,7 @@ def demo_mean_roc():
     pos_label = True
     n_datasets = 20
     rocs = []
-    for i in range(n_datasets):
+    for _ in range(n_datasets):
         x, y = sample_data(n1=300, mu1=0.0, std1=0.5,
                            n2=300, mu2=1.0, std2=0.7, seed=i)
         roc = compute_roc(X=x, y=y, pos_label=pos_label)
@@ -171,7 +176,7 @@ def demo_auto_flip():
     plot_roc(roc1, show_opt=True, label="Original", color="green", ax=ax2)
     plot_roc(roc2, show_opt=True, label="Flipped", color="red", ax=ax2)
     ax2.set_title("Fixed, with auto-flip")
-    legend = ax2.legend(loc="center")
+    ax2.legend(loc="center")
 
 
 if __name__ == "__main__":

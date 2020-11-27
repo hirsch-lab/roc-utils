@@ -1,10 +1,7 @@
-import sys
 import unittest
 import numpy as np
-from pathlib import Path
 
-import roc_utils._roc as roc
-
+import roc_utils as roc
 from sklearn.datasets import load_iris
 from sklearn.metrics import roc_auc_score
 
