@@ -6,15 +6,15 @@
 <!--https://pypistats.org/packages/roc-utils-->
 [![image](https://img.shields.io/pypi/v/roc-utils)](https://pypi.org/project/roc-utils/)
 [![License](https://img.shields.io/pypi/l/roc-utils)](https://github.com/hirsch-lab/roc-utils/blob/main/LICENSE)
-<!--[![Build Status](https://travis-ci.org/hirsch-lab/cyminiball.svg?branch=main)](https://travis-ci.org/hirsch-lab/roc-utils)-->
 [![CodeFactor](https://www.codefactor.io/repository/github/hirsch-lab/roc-utils/badge)](https://www.codefactor.io/repository/github/hirsch-lab/roc-utils)
 [![DeepSource](https://deepsource.io/gh/hirsch-lab/roc-utils.svg/?label=active+issues)](https://deepsource.io/gh/hirsch-lab/roc-utils/?ref=repository-badge)
+<!--[![Build Status](https://travis-ci.org/hirsch-lab/cyminiball.svg?branch=main)](https://travis-ci.org/hirsch-lab/roc-utils)-->
 <!--Travis build and test-->
 <!--Coveralls.io-->
 <!--Read-the-docs not required for such a small project-->
 
 
-This Python package provides tools to compute and visualize [ROC curves](https://en.wikipedia.org/wiki/Receiver_operating_characteristic). ROC curves can be used to graphically assess the diagnostic ability of a binary classifier. 
+This Python package provides tools to compute and visualize [ROC curves](https://en.wikipedia.org/wiki/Receiver_operating_characteristic). ROC curves can be used to graphically assess the diagnostic ability of binary classifiers. 
 
 
 ### Installation:
