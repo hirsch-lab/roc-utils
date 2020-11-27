@@ -9,6 +9,7 @@ from ._sampling import resample_data
 
 _DEFAULT_OBJECTIVE = "minoptsym"
 
+
 def get_objective(objective=_DEFAULT_OBJECTIVE, **kwargs):
     """
     The function returns a callable computing a cost f(fpr(c), tpr(c))

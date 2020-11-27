@@ -23,8 +23,8 @@ def sample_data(n1, mu1, std1, n2, mu2, std2, seed=42):
     x2 = rng.normal(mu2, std2, n2)
     y1 = np.zeros(n1, dtype=bool)
     y2 = np.ones(n2, dtype=bool)
-    x = np.concatenate([x1,x2])
-    y = np.concatenate([y1,y2])
+    x = np.concatenate([x1, x2])
+    y = np.concatenate([y1, y2])
     return x, y
 
 
@@ -40,7 +40,7 @@ def demo_basic_usage():
                          n2=300, mu2=0.8, std2=0.7)
 
     # Show data
-    _, (ax1, ax2) = plt.subplots(2,1)
+    _, (ax1, ax2) = plt.subplots(2, 1)
     ax1.hist(x1[~y1], bins=20, density=True,
              color="red", alpha=0.4, label="Class 1")
     ax1.hist(x1[y1], bins=20, density=True,
@@ -86,7 +86,7 @@ def demo_mean_roc():
     pos_label = True
     n_datasets = 20
     rocs = []
-    for _ in range(n_datasets):
+    for i in range(n_datasets):
         x, y = sample_data(n1=300, mu1=0.0, std1=0.5,
                            n2=300, mu2=1.0, std2=0.7, seed=i)
         roc = compute_roc(X=x, y=y, pos_label=pos_label)
@@ -108,7 +108,6 @@ def demo_mean_roc():
     _, ax2 = plt.subplots()
     plot_mean_roc(rocs, show_ci=False, show_ti=False, show_all=True, ax=ax2)
     ax2.set_title("Mean ROC and sample ROCs")
-
 
 
 def demo_bootstrap_roc():
@@ -148,7 +147,7 @@ def demo_objectives():
     print()
     print("Comparison of different objectives:")
     for key, val in roc.opd.items():
-        print("%15s thr=% .3f, J=%7.3f" % (key+":", val.opt, val.opo) )
+        print("%15s thr=% .3f, J=%7.3f" % (key+":", val.opt, val.opo))
 
     _, ax1 = plt.subplots()
     plot_roc(roc, show_opt=True, ax=ax1)

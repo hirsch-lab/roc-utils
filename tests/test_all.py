@@ -11,13 +11,13 @@ class TestsIris(unittest.TestCase):
         self.X, self.y = load_iris(return_X_y=True,
                                    as_frame=True)
         # Just pick two classes.
-        mask = self.y.isin([0,1])
+        mask = self.y.isin([0, 1])
         self.X = self.X[mask]
         self.y = self.y[mask]
         self.pos_label = 1
 
     def test_sklearn_consistentcy(self):
-        X = self.X.iloc[:,0]
+        X = self.X.iloc[:, 0]
         y = self.y
         ret = roc.compute_roc(X=X, y=y, pos_label=self.pos_label)
         auc_sklearn = roc_auc_score(y_true=self.y, y_score=X)
