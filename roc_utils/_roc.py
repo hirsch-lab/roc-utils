@@ -5,7 +5,7 @@ from scipy import interp
 
 from ._stats import mean_intervals
 from ._types import StructContainer
-from ._sampling import bootstrapped, resample_data
+from ._sampling import resample_data
 
 
 def get_objective(method="minopt", **kwargs):
@@ -35,7 +35,8 @@ def get_objective(method="minopt", **kwargs):
                     tn, fp, fn). With C0 being the fixed costs, the C_tp the
                     cost associated with a true positive and P(tp) the
                     proportion of TP's in the population, and so on:
-                        C = C0 + C_tp*P(tp) + C_tn*P(tn) + C_fp*P(fp) + C_fn*P(fn)
+                        C = (C0 + C_tp*P(tp) + C_tn*P(tn)
+                             + C_fp*P(fp) + C_fn*P(fn))
                     It can be shown (Metz 1978) that the slope of the ROC curve
                     at the optimal cutoff value is
                         m = (1-prevalence)/prevalence * (C_fp-C_tn)/(C_fn-C_tp)
@@ -57,8 +58,8 @@ def get_objective(method="minopt", **kwargs):
                     performance of a test.
                         J = sensitivity * specitivity
                         J = tpr * (1-fpr)
-                    The objective is 0 (minimal) if either (1-fpr) or tpr are 0,
-                    and it is 1 (maximal) if tpr=1 and fpr=0.
+                    The objective is 0 (minimal) if either (1-fpr) or tpr
+                    are 0, and it is 1 (maximal) if tpr=1 and fpr=0.
                     The concordance can be visualized as the rectangular
                     formed by tpr and (1-fpr).
         minopt:     Computes the distance from the optimal point (0,1).
@@ -281,7 +282,7 @@ def compute_roc(X, y, pos_label=True, objective="minopt", auto_flip=False):
     assert(len(X) == len(y))
 
     if pd.isna(X).any():
-        #msg = "NaNs found in data. Better remove with X[~np.isnan(X)]."
+        # msg = "NaNs found in data. Better remove with X[~np.isnan(X)]."
         # warnings.warn(msg)
         isnan = pd.isna(X)
         X = X[~isnan]
@@ -440,7 +441,6 @@ def compute_mean_roc(rocs,
     fpr_mean = np.linspace(0, 1, resolution)
     fpr_mean = np.insert(fpr_mean, 0, 0)  # Insert a leading 0 (closure)
     n_samples = len(rocs)
-    ret_all = []
     thr_all = np.zeros([n_samples, resolution + 1])
     tpr_all = np.zeros([n_samples, resolution + 1])
     auc_all = np.zeros(n_samples)
@@ -510,9 +510,9 @@ def compute_roc_bootstrap(X, y, pos_label,
         random_state:   None, integer or np.random.RandomState
         stratified:     Perform stratified sampling, which takes into account
                         the relative frequency of the labels. This ensures that
-                        the samples always will have the same number of positive
-                        and negative samples. Enable stratification if the
-                        dataset is very imbalanced or small, such that
+                        the samples always will have the same number of
+                        positive and negative samples. Enable stratification
+                        if the dataset is very imbalanced or small, such that
                         degenerate samples (with only positives or negatives)
                         will become more likely. Disabling this flag results
                         in a mean ROC curve that will appear smoother: the
@@ -531,7 +531,7 @@ def compute_roc_bootstrap(X, y, pos_label,
     # k: number of classes
     X = np.asarray(X)
     y = np.asarray(y)
-    n = len(X)
+    # n = len(X)
     k = len(np.unique(y))
     if not isinstance(random_state, np.random.RandomState):
         random_state = np.random.RandomState(random_state)

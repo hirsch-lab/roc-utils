@@ -26,11 +26,12 @@ def plot_roc(roc,
         show_opt:       Show optimal point.
         show_details:   Show additional information.
         format_axes:    Apply axes settings, show legend, etc.
-        kwargs:         A dictionary with detail settings not exposed explictly in
-                        the function signature. The following options are available:
+        kwargs:         A dictionary with detail settings not exposed
+                        explicitly in the function signature. The following
+                        options are available:
                         - zorder:
                         - legend_out: Place legend outside (default: False)
-                        - legend_label_inv: Use 1-AUC if roc.inv=True (default: True)
+                        - legend_label_inv: Use 1-AUC if roc.inv=True (True)
                         Additional kwargs are forwarded to ax.plot().
     """
     if ax is None:

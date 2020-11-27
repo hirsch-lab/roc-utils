@@ -1,15 +1,15 @@
 """Package build and install script.
 
 Useful commands:
-    python setup.py clean                   Clean temporary files
-    python setup.py sdist                   Create source distribution (.tar.gz)
-    python setup.py bdist_wheel             Create built distribution (.whl)
-    python setup.py sdist bdist_wheel       Create both
-    python setup.py flake8                  Run flake8 (coding style check)
-    pip install dist/roc_utils...tar.gz     Install from local tarball
-    pip show roc_utils                      Show package information
-    pip uninstall roc_utils                 Uninstall
-    twine check dist/*                      Check the markup in the README
+    python setup.py clean                 Clean temporary files
+    python setup.py sdist                 Create source distribution (.tar.gz)
+    python setup.py bdist_wheel           Create built distribution (.whl)
+    python setup.py sdist bdist_wheel     Create both
+    python setup.py flake8                Run flake8 (coding style check)
+    pip install dist/roc_utils...tar.gz   Install from local tarball
+    pip show roc_utils                    Show package information
+    pip uninstall roc_utils               Uninstall
+    twine check dist/*                    Check the markup in the README
     twine upload --repository testpypi dist/* Upload everything to TestPyPI
     pip install --index-url https://test.pypi.org/simple/ --no-deps roc_utils
 """
@@ -58,10 +58,9 @@ with open("README.md", encoding="utf-8") as fid:
     long_description = fid.read()
 
 setup(name="roc_utils",
-      version="0.1.0",
+      version=get_version(),
       url="https://github.com/hirsch-lab/roc-utils",
       author="Norman Juchler",
-      author_email="normanius@gmail.com",
       description=("Tools to compute and visualize ROC curves."),
       long_description=long_description,
       long_description_content_type="text/markdown",
