@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def resample_data(*arrays, **kwargs):
     """
     Similar to sklearn's resample function, with a few more extras.

@@ -4,6 +4,7 @@ import matplotlib.colors as mplc
 
 from ._roc import compute_roc, compute_mean_roc, compute_roc_bootstrap
 
+
 def plot_roc(roc,
              color="red",
              label=None,
@@ -172,7 +173,7 @@ def plot_mean_roc(rocs, auto_flip=True, show_all=False, ax=None, **kwargs):
             ax.plot(ret.fpr, ret.tpr,
                     color="gray",
                     alpha=0.2,
-                    zorder=zorder+2)
+                    zorder=zorder + 2)
     if show_ti:
         # 95% interval
         tpr_sort = np.sort(ret_mean.tpr_all, axis=0)
@@ -182,7 +183,7 @@ def plot_mean_roc(rocs, auto_flip=True, show_all=False, ax=None, **kwargs):
         ax.fill_between(ret_mean.fpr, tpr_lower, tpr_upper,
                         color="gray", alpha=.2,
                         label=label_int,
-                        zorder=zorder+1)
+                        zorder=zorder + 1)
     if show_ci:
         # 95% confidence interval
         tpr_std = np.std(ret_mean.tpr_all, axis=0, ddof=1)
@@ -196,12 +197,12 @@ def plot_mean_roc(rocs, auto_flip=True, show_all=False, ax=None, **kwargs):
 
     # Last but not least, plot the average ROC curve on top  of everything.
     plot_roc(roc=ret_mean, label=label, show_opt=show_opt,
-             color=color, ax=ax, zorder=zorder+3, **kwargs)
+             color=color, ax=ax, zorder=zorder + 3, **kwargs)
     return ret_mean
 
 
 def plot_roc_simple(X, y, pos_label, auto_flip=True,
-                  title=None, ax=None, **kwargs):
+                    title=None, ax=None, **kwargs):
     """
     Compute and plot the receiver-operator characteristic curve for X and y.
     kwargs are forwarded to plot_roc(), see there for details.
@@ -218,8 +219,8 @@ def plot_roc_simple(X, y, pos_label, auto_flip=True,
     is_opt_str = isinstance(show_opt, (str, list, tuple))
     objective = show_opt if is_opt_str else "minopt"
     ret = compute_roc(X=X, y=y, pos_label=pos_label,
-                     objective=objective,
-                     auto_flip=auto_flip)
+                      objective=objective,
+                      auto_flip=auto_flip)
     plot_roc(roc=ret, show_opt=show_opt, ax=ax, **kwargs)
     title = "ROC curve" if title is None else title
     ax.get_figure().suptitle(title)

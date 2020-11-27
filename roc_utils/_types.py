@@ -14,6 +14,7 @@ class StructContainer():
         for k,v in settings.items():
             print(k,v)
     """
+
     def __init__(self, dictionary=None, **kwargs):
         if dictionary is not None:
             assert(isinstance(dictionary, (dict, StructContainer)))
@@ -32,7 +33,7 @@ class StructContainer():
         self.__dict__[key] = value
 
     def __len__(self):
-        return sum( 1 for k in self.keys() )
+        return sum(1 for k in self.keys())
 
     def __repr__(self):
         return "struct(**%s)" % str(self.__dict__)
@@ -43,7 +44,7 @@ class StructContainer():
     def items(self):
         for k, v in self.__dict__.items():
             if not k.startswith("_"):
-                yield (k,v)
+                yield (k, v)
 
     def keys(self):
         for k in self.__dict__:

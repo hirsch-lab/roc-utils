@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.stats as st
 
+
 def mean_intervals(data, confidence=0.95, axis=None):
     """
     Compute the mean, the confidence interval of the mean, and the tolerance
@@ -16,10 +17,10 @@ def mean_intervals(data, confidence=0.95, axis=None):
     a = 1.0 * np.array(data)
     n = len(a)
     # Both s=std() and se=sem() use unbiased estimators (ddof=1).
-    m  = np.mean(a, axis=axis)
-    s  = np.std(a, ddof=1, axis=axis)
+    m = np.mean(a, axis=axis)
+    s = np.std(a, ddof=1, axis=axis)
     se = st.sem(a, axis=axis)
-    t  = st.t.ppf((1 + confidence) / 2., n - 1)
+    t = st.t.ppf((1 + confidence) / 2., n - 1)
     ci = np.c_[m - se * t, m + se * t]
     ti = np.c_[m - s * t, m + s * t]
     assert(ci.shape[1] == 2 and ci.shape[0] ==

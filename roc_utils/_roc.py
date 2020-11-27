@@ -463,12 +463,12 @@ def compute_mean_roc(rocs,
     # Compute performance/discriminability measures.
     costs = {o: get_objective(o) for o in objectives}
     ret_mean = compute_roc_aucopt(fpr=fpr_mean,
-                                 tpr=tpr_mean,
-                                 thr=thr_mean,
-                                 X=None,
-                                 y=None,
-                                 costs=costs,
-                                 auto_flip=auto_flip)
+                                  tpr=tpr_mean,
+                                  thr=thr_mean,
+                                  X=None,
+                                  y=None,
+                                  costs=costs,
+                                  auto_flip=auto_flip)
 
     # Invert predictor only if enough evidence was found (-> mean).
     if ret_mean.inv:
