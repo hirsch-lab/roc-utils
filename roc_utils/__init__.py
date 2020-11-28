@@ -10,4 +10,5 @@ from ._plot import (plot_roc,
                     plot_roc_simple,
                     plot_roc_bootstrap)
 from ._demo import (demo_basic,
-                    demo_bootstrap)
+                    demo_bootstrap,
+                    demo_sample_data)
